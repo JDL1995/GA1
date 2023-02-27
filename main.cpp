@@ -24,9 +24,14 @@ string reverseParentheses(string str)
         }
         else if (str[i] == ')')
         {
-            string reversed = str.substr(start + 1, i - start - 1);
-            reverse(reversed.begin(), reversed.end());
-            return reverseParentheses(str.substr(0, start) + reversed + str.substr(i + 1));
+            if (i == start + 1)
+                return reverseParentheses(str.substr(0, start) + str.substr(i + 1));
+            else
+            {
+                string reversed = str.substr(start + 1, i - start - 1);
+                reverse(reversed.begin(), reversed.end());
+                return reverseParentheses(str.substr(0, start) + reversed + str.substr(i + 1));
+            }
         }
     }
     return str;
