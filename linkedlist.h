@@ -12,8 +12,13 @@ using namespace std;
 
 struct Node
 {
-   string data;
+    string data;
+    bool guilty;
     Node *next, *prev;
+
+    Node() {
+        guilty = 0;
+    }
 };
 
 
@@ -118,6 +123,80 @@ public:
             printrec_data2(current->next);
         }
     }
+    void insertionS(Node * head)
+    {
+        if (head == nullptr)
+            return;
+
+
+        int key = stoi(head->data);
+
+        Node* temp = head;
+        Node* temp2 = head;
+
+        while (temp2->prev != nullptr && stoi(temp2->prev->data) > key)
+        {
+
+            temp2 = temp2->prev;
+
+        }
+        if (temp->next == nullptr && temp2->prev == nullptr && stoi(temp2->data) > key)//make this the first if statment
+        {
+
+            temp->prev->next = temp->next;
+            head = temp->prev;
+            temp->next = temp2;
+            temp->prev = temp2->prev;
+            head = temp;
+            temp2->prev = temp;
+            //print();
+        }
+        else if (temp2->prev == nullptr && stoi(temp2->data) > key)
+        {
+
+            temp->next->prev = temp->prev;
+            temp->prev->next = temp->next;
+            head = temp->prev;
+            temp->next = temp2;
+            temp->prev = nullptr;
+            head = temp;
+            temp2->prev = temp;
+            //print();
+        }
+
+
+        //might need a tail and adjacent case
+        else if (temp->next == nullptr && stoi(temp2->data) > key)
+        {
+
+            temp->prev->next = temp->next;  //dont know if it breaks it  * = nullptr *
+            head = temp->prev;
+            temp->next = temp2;
+            temp->prev = temp2->prev;
+            temp2->prev->next = temp;
+            temp2->prev = temp;
+            //print();
+
+        }
+        else if (stoi(temp2->data) > stoi(temp->data))  //general case
+        {
+
+
+            temp->next->prev = temp->prev;
+            temp->prev->next = temp->next;
+            head = temp->prev;
+            temp->next = temp2;
+            temp->prev = temp2->prev;
+            temp2->prev->next = temp;
+            temp2->prev = temp;
+            //print();
+        }
+
+
+
+
+        insertionS(head->next);
+    }
 };
 
 
@@ -177,7 +256,7 @@ void linkedlist::swap(int a, int b)
                 b1->next=a1;
                 head=b1;
             }else if (b==size-1){
-              a1->prev=b1->prev
+              a1->prev=b1->prev;
               a1->next->prev=b1;
 
               b1->prev->next=a1;
@@ -290,4 +369,79 @@ void linkedlist::swap(int a, int b)
         }
         
     };
+
+// Sebastian's Sort Function
+void insertionSort(Node* head)
+{
+	
+		//print();
+	
+
+		for (Node* traverse = head->next; traverse != nullptr; traverse = traverse->next)
+		{
+			int key = stoi(traverse->data);
+
+			Node* temp = traverse;
+			Node* temp2 = traverse;
+
+			while (temp2->prev != nullptr && stoi(temp2->prev->data) > key)
+			{
+
+				temp2 = temp2->prev;
+
+			}
+			if (temp->next == nullptr && temp2->prev == nullptr && stoi(temp2->data) > key)//make this the first if statment
+			{
+
+				temp->prev->next = temp->next;
+				traverse = temp->prev;
+				temp->next = temp2;
+				temp->prev = temp2->prev;
+				head = temp;
+				temp2->prev = temp;
+				//print();
+			}
+			else if (temp2->prev == nullptr && stoi(temp2->data) > key)
+			{
+
+				temp->next->prev = temp->prev;
+				temp->prev->next = temp->next;
+				traverse = temp->prev;
+				temp->next = temp2;
+				temp->prev = nullptr;
+				head = temp;
+				temp2->prev = temp;
+				//print();
+			}
+
+
+			//might need a tail and adjacent case
+			else if (temp->next == nullptr && stoi(temp2->data) > key)
+			{
+
+				temp->prev->next = temp->next;  //dont know if it breaks it  * = nullptr *
+				traverse = temp->prev;
+				temp->next = temp2;
+				temp->prev = temp2->prev;
+				temp2->prev->next = temp;
+				temp2->prev = temp;
+				//print();
+
+			}
+			else if (stoi(temp2->data) > stoi(temp->data))  //general case
+			{
+
+
+				temp->next->prev = temp->prev;
+				temp->prev->next = temp->next;
+				traverse = temp->prev;
+				temp->next = temp2;
+				temp->prev = temp2->prev;
+				temp2->prev->next = temp;
+				temp2->prev = temp;
+				//print();
+			}
+				//print();
+		}
+}
 #endif

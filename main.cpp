@@ -107,6 +107,57 @@ void insertionS(Node * head,linkedlist theList)
 	}
 	insertionS(head->next,theList);
 }
+
+
+// will need take in all of the IDs (sorted)
+void guiltyVerdict(Node* head) {
+    Node* cur = head;
+    Node* search = nullptr;
+    if (head == nullptr || head->next == nullptr) {
+        return;
+    }
+    while (cur != nullptr) {
+        search = cur->next;
+        while (search != nullptr) {
+            if (stoi(search->data) == stoi(cur->data)) {
+                cur->guilty = true;
+                search->guilty = true;
+            }
+            search = search->next;
+        }
+
+        cur = cur->next;
+    }
+    //std::cout << "done";
+}
+
+// will also need to take in all IDs sorted
+void guiltyPrint(Node* head, std::ofstream& outputFile) {
+    Node* cur = head;
+    outputFile << "Guilty:\n";
+    if (head->guilty) {
+        outputFile << head->data << std::endl;
+        cur = cur->next;
+    }
+    
+    while (cur != nullptr) {
+        if (cur->guilty && (cur->prev->data != cur->data)) {
+            outputFile << cur->data << std::endl;
+        }
+        cur = cur->next;
+    }
+
+    
+    cur = head;
+    outputFile << "Innocent:\n";
+    while (cur != nullptr) {
+        if (!cur->guilty) {
+            outputFile << cur->data << std::endl;
+        }
+        cur = cur->next;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     ArgumentManager am(argc, argv);
@@ -127,6 +178,7 @@ int main(int argc, char *argv[])
     ofstream output(am.get("output"));
 
     linkedlist list_bar1, list_bar2, list_bar1_sorted, list_bar2_sorted;
+    linkedlist allIDs;
     vector<string> vect1, vect2;
     string line, value_str, reversedStr, currentBarcode;
     int value;
@@ -296,8 +348,33 @@ int main(int argc, char *argv[])
         list_bar2.printrec_data1(list_bar2.getHead());
         cout << endl;
 
-        
 
+        Node* tempHead = list_bar1.getHead();
+        while (tempHead != nullptr) {
+            allIDs.add_tail(tempHead->data);
+            tempHead = tempHead->next;
+        }
+        tempHead = list_bar2.getHead();
+        while (tempHead != nullptr) {
+            allIDs.add_tail(tempHead->data);
+            tempHead = tempHead->next;
+
+        }
+
+        // printing out new merged list before and after sort
+        std::cout << std::endl << std::endl << std::endl;
+        std::cout << "All IDs merged together before sort:\n";
+        allIDs.printrec_data1(allIDs.getHead());
+        std::cout << std::endl;
+        std::cout << "\nAfter Sort:\n";
+        insertionSort(allIDs.getHead());
+        allIDs.printrec_data1(allIDs.getHead());
+        std::cout << std::endl;
+
+
+
+        guiltyVerdict(allIDs.getHead());
+        guiltyPrint(allIDs.getHead(), output);
     }
     return 0;
 }
