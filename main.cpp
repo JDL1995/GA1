@@ -7,6 +7,7 @@
 #include <algorithm>
 using namespace std;
 
+
 bool is_emptyFile(std::ifstream &pFile)
 {
     return pFile.peek() == std::ifstream::traits_type::eof();
@@ -37,6 +38,75 @@ string reverseParentheses(string str)
     return str;
 }
 
+void insertionS(Node * head,linkedlist theList)
+{
+	if (head == nullptr)
+		return;
+
+	int key = stoi(head->data);
+
+	Node* temp = head;
+	Node* temp2 = head;
+
+	while (temp2->prev != nullptr && stoi(temp2->prev->data) > key)
+	{
+
+		temp2 = temp2->prev;
+
+	}
+	if (temp->next == nullptr && temp2->prev == nullptr && stoi(temp2->data) > key)//make this the first if statment
+	{
+
+		temp->prev->next = temp->next;
+		head = temp->prev;
+		temp->next = temp2;
+		temp->prev = temp2->prev;
+		head = temp;
+		temp2->prev = temp;
+		//print();
+	}
+	else if (temp2->prev == nullptr && stoi(temp2->data) > key)
+	{
+
+		temp->next->prev = temp->prev;
+		temp->prev->next = temp->next;
+		head = temp->prev;
+		temp->next = temp2;
+		temp->prev = nullptr;
+		head = temp;
+		temp2->prev = temp;
+		//print();
+	}
+
+
+	//might need a tail and adjacent case
+	else if (temp->next == nullptr && stoi(temp2->data) > key)
+	{
+
+		temp->prev->next = temp->next;  //dont know if it breaks it  * = nullptr *
+		head = temp->prev;
+		temp->next = temp2;
+		temp->prev = temp2->prev;
+		temp2->prev->next = temp;
+		temp2->prev = temp;
+		//print();
+
+	}
+	else if (stoi(temp2->data) > stoi(temp->data))  //general case
+	{
+
+
+		temp->next->prev = temp->prev;
+		temp->prev->next = temp->next;
+		head = temp->prev;
+		temp->next = temp2;
+		temp->prev = temp2->prev;
+		temp2->prev->next = temp;
+		temp2->prev = temp;
+		//print();
+	}
+	insertionS(head->next,theList);
+}
 int main(int argc, char *argv[])
 {
     ArgumentManager am(argc, argv);
@@ -56,7 +126,7 @@ int main(int argc, char *argv[])
     // ifstream command(am.get("command"));
     ofstream output(am.get("output"));
 
-    linkedlist<string,int> list_bar1, list_bar2, list_bar1_sorted, list_bar2_sorted;
+    linkedlist list_bar1, list_bar2, list_bar1_sorted, list_bar2_sorted;
     vector<string> vect1, vect2;
     string line, value_str, reversedStr, currentBarcode;
     int value;
@@ -152,7 +222,7 @@ int main(int argc, char *argv[])
             cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
             value = stoi(reversedStr);
             cout << "value of string as an integer pushed to list_bar1: " << value << endl;
-            list_bar1.add_tail(reversedStr, value);
+            list_bar1.add_tail(reversedStr);
         }
 
         cout << "List_bar_1 size: " << list_bar1.getSize() << endl;
@@ -171,7 +241,7 @@ int main(int argc, char *argv[])
             cout << "reversed string pushed to list_bar2: " << reversedStr << endl;
             value = stoi(reversedStr);
             cout << "value of string as an integer pushed to list_bar2: " << value << endl;
-            list_bar2.add_tail(reversedStr, value);
+            list_bar2.add_tail(reversedStr);
         }
 
         cout << "List_bar_2 size: " << list_bar1.getSize() << endl;
@@ -198,14 +268,17 @@ int main(int argc, char *argv[])
         cout << endl;
 
         cout << endl
-             << "printing all data1 of list_bar2 after sorting" << endl
+             << "printing all data1 of list_bar2 before sorting" << endl
              << endl;
         list_bar2.printrec_data1(list_bar2.getHead());
         cout << endl;
-
+        //insertionS(list_bar2.getHead());
+         cout << endl;
+            
         cout << endl
-             << "printing all data2 of list_bar2 after sorting" << endl
+             << "printing all data of list_bar2 after sorting" << endl
              << endl;
+             list_bar2.recursiveSort(list_bar2.getHead(),0,0,0);
         list_bar2.printrec_data2(list_bar2.getHead());
         cout << endl;
 
