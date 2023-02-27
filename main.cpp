@@ -171,9 +171,14 @@ int main(int argc, char *argv[])
                     }
                     else if (line != "Bar1")
                     {
-                        value_str = line;
-                        cout << "Pushing the following to vect1: |" << value_str << "|" << endl;
-                        vect1.push_back(value_str);
+                        reversedStr = reverseParentheses(line);
+                     // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
+                  //   cout << "original string : " << vect1[i] << endl;
+                    cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
+                    value = stoi(reversedStr);
+                     cout << "value of string as an integer pushed to list_bar1: " << value << endl;
+                     list_bar1.add_tail(reversedStr);
+                      //  vect1.push_back(value_str);
                     }
 
                 } while (getline(inputfile, line));
@@ -203,8 +208,15 @@ int main(int argc, char *argv[])
                     else if (line != "Bar2")
                     {
                         value_str = line;
+                         reversedStr = reverseParentheses(line);
+            // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
+                  //   cout << "original string : " << vect1[i] << endl;
+                     cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
+                     value = stoi(reversedStr);
+                     cout << "value of string as an integer pushed to list_bar1: " << value << endl;
+                     list_bar2.add_tail(reversedStr);
                         cout << "Pushing the following to vect2: |" << value_str << "|" << endl;
-                        vect2.push_back(value_str);
+                      //  vect2.push_back(value_str);
                     }
 
                 } while (getline(inputfile, line));
@@ -212,7 +224,7 @@ int main(int argc, char *argv[])
         }
 
         cout << endl;
-
+/*
         cout << "Vector 1 size: " << vect1.size() << endl;
         for (int i = 0; i < vect1.size(); i++)
         {   
@@ -243,7 +255,7 @@ int main(int argc, char *argv[])
             cout << "value of string as an integer pushed to list_bar2: " << value << endl;
             list_bar2.add_tail(reversedStr);
         }
-
+*/
         cout << "List_bar_2 size: " << list_bar1.getSize() << endl;
         cout << endl
              << "printing list_bar2" << endl
@@ -256,19 +268,20 @@ int main(int argc, char *argv[])
         //list_bar2_sorted.add_tail(list_bar2.insertionSort_recursive(list_bar2.getHead()));
 
         cout << endl
-             << "printing all data1 of list_bar1 after sorting" << endl
+             << "printing all data of list_bar1 before sorting" << endl
              << endl;
         list_bar1.printrec_data1(list_bar1.getHead());
-        cout << endl;
-
+        cout << "ok"<<endl;
+      //  list_bar1.recursiveSort(list_bar1.getHead(),0,0,0);
+        //list_bar1.printrec_data2(list_bar1.getHead());
         cout << endl
-             << "printing all data2 of list_bar1 after sorting" << endl
+             << "printing all data of list_bar1 after sorting" << endl
              << endl;
         list_bar1.printrec_data2(list_bar1.getHead());
         cout << endl;
 
         cout << endl
-             << "printing all data1 of list_bar2 before sorting" << endl
+             << "printing all data of list_bar2 before sorting" << endl
              << endl;
         list_bar2.printrec_data1(list_bar2.getHead());
         cout << endl;
@@ -278,7 +291,7 @@ int main(int argc, char *argv[])
         cout << endl
              << "printing all data of list_bar2 after sorting" << endl
              << endl;
-             list_bar2.recursiveSort(list_bar2.getHead(),0,0,0);
+        list_bar2.recursiveSort(list_bar2.getHead(),0,0,0);
         list_bar2.printrec_data2(list_bar2.getHead());
         cout << endl;
 
