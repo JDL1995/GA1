@@ -1,3 +1,4 @@
+
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
@@ -186,6 +187,7 @@ void linkedlist::swap(int a, int b)
               a1->next=nullptr;
               b1->prev=nullptr;
               head=b1;
+              tail=a1;
             }
             else{
   
