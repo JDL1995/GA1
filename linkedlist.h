@@ -9,19 +9,22 @@
 #include <cctype>
 using namespace std;
 
-template <typename T1, typename T2>
 struct Node
 {
-    T1 data1;
-    T2 data2;
-    Node<T1,T2> *next, *previous;
+    string data;
+    bool guilty;
+    Node *next, *prev;
+
+    Node()
+    {
+        guilty = false;
+    }
 };
 
-template <typename T1, typename T2>
 class linkedlist
 {
 private:
-    Node<T1,T2> *head, *tail;
+    Node *head, *tail;
     int size;
 
 public:
@@ -29,12 +32,12 @@ public:
     {
         head, tail = nullptr;
         size = 0;
-    }
-    Node<T1,T2> *getHead()
+    };
+    Node *getHead()
     {
         return head;
     }
-    Node<T1,T2> *getTail()
+    Node *getTail()
     {
         return tail;
     }
@@ -42,48 +45,278 @@ public:
     {
         return size;
     }
-    void add_tail(T1 data1, T2 data2)
+    void setHead(Node *n)
     {
-        Node<T1,T2> *temp = new Node<T1,T2>();
-        temp->data1 = data1;
-        temp->data2 = data2;
-        temp->previous = nullptr;
+        head = n;
+    }
+    Node *recursiveGet(int pos, int ctr, Node *head)
+    {
+        if (ctr == pos)
+        {
+            return head;
+        }
+        else
+        {
+            head = recursiveGet(pos, ++ctr, head->next);
+        }
+        return head;
+    }
+    void recursiveSort(Node *n, int i, int j, int ctr)
+    {
+        cout << "size is: " << getSize() << endl;
+        if (i == getSize() - 1)
+        {
+            return;
+        }
+
+        if (stoi(recursiveGet(j, 0, head)->data) < stoi(recursiveGet(i, 0, head)->data))
+        {
+            swap(j, i);
+        }
+        if (j == getSize() - 1)
+        {
+            i++;
+            j = i;
+        }
+        else
+        {
+            j++;
+        }
+        recursiveSort(head, i, j, ++ctr);
+        return;
+    }
+    void add_tail(string data)
+    {
+        Node *temp = new Node();
+        temp->data = data;
+
+        temp->prev = nullptr;
         temp->next = nullptr;
 
         if (head == nullptr || tail == nullptr)
             head = tail = temp;
         else
         {
-            temp->previous = tail;
+            temp->prev = tail;
             tail->next = temp;
             tail = temp;
         }
         size++;
     }
-    void printrec_data1(Node<T1,T2> *current)
+    void swap(int a, int b)
     {
-        if (current == nullptr)
-            return;
-        else
+        Node *a1 = recursiveGet(a, 0, head);
+        Node *b1 = recursiveGet(b, 0, head);
+        Node *tempnext = b1->next;
+        Node *tempprev = b1->prev;
+        // temp = b1;
+        int size = getSize();
+        printrec_data1(head);
+        cout << "a1 `data: " << a1->data << ". b1->data: " << b1->data << endl;
+        if ((a != 0 && b != 0) && (a != (size - 1) && b != (size - 1)))
         {
-            if (current->next != nullptr)
-                cout << current->data1 << " ";
+
+            if (b == a - 1)
+            {
+                cout << "a1: " << a1->data << endl;
+                cout << "b1:" << b1->data << endl;
+                a1->next->prev = b1;
+                b1->next = a1->next;
+                b1->prev->next = a1;
+                cout << "b1 prev" << b1->prev->data << endl;
+
+                cout << "b1->prev->next=" << b1->prev->next->data << endl;
+                cout << "b1->next" << b1->next->data << endl;
+                a1->prev = tempprev;
+                b1->prev = a1;
+                a1->next = b1;
+                cout << "b==a-1" << endl;
+                cout << "a1->next=" << a1->next->data << endl;
+                cout << "a1->data:" << a1->data << endl;
+                cout << "b1->next" << b1->next->data << endl;
+                // cout<<print2();
+            }
+            else if (a == b - 1)
+            {
+                b1->next->prev = a1;
+                b1->prev = a1->prev;
+                a1->prev->next = b1;
+
+                a1->next = b1->next;
+                a1->prev = b1;
+                b1->next = a1;
+            }
             else
-                cout << current->data1;
-            printrec_data1(current->next);
+            {
+                b1->prev->next = a1;
+                a1->prev->next = b1;
+                b1->next->prev = a1;
+                a1->next->prev = b1;
+                b1->prev = a1->prev;
+                b1->next = a1->next;
+                //  cout<<"new b1->next: "<<b1->next->data<<endl;
+                //   cout<<"temp->next: "<<temp->next->data<<endl;
+                //     cout<<"new b1->prev: "<<b1->prev->data<<endl;
+                //  cout<<"temp->prev: "<<temp->prev->data<<endl;
+                a1->prev = tempprev;
+                a1->next = tempnext;
+                //  cout<<print2()<<endl;
+            }
         }
+        else if (a == 0)
+        {
+            cout << "a == 0" << endl;
+            if (b == a + 1)
+            {
+                a1->prev = b1;
+                b1->prev = nullptr;
+                b1->next->prev = a1;
+                a1->next = b1->next;
+                b1->next = a1;
+                head = b1;
+            }
+            else if (b == size - 1)
+            {
+                a1->prev = b1->prev;
+                a1->next->prev = b1;
+
+                b1->prev->next = a1;
+
+                b1->next = a1->next;
+                a1->next = nullptr;
+                b1->prev = nullptr;
+                head = b1;
+                tail = a1;
+            }
+            else
+            {
+
+                b1->prev->next = a1;
+                b1->next->prev = a1;
+                b1->next = a1->next;
+                a1->next->prev = b1;
+                a1->prev = tempprev;
+                a1->next = tempnext;
+                if (b != size - 1)
+                {
+                    // tempnext->prev = a1;
+                }
+                else
+                {
+                    tail = a1;
+                }
+                head = b1;
+            }
+        }
+        else if (b == 0)
+        {
+            cout << "a1 data: " << a1->data << ". b1->data: " << b1->data << endl;
+            cout << "b is zero" << endl;
+            //    cout<<print2()<<endl;
+            //  cout<<"a1->next->prev is "<<a1->next->prev->data<<endl;
+            //    cout<<"b1->next is "<<b1->next->data<<endl;
+            //    cout<<"a1->next is "<<a1->next->data<<endl;
+            if (a == b + 1)
+            {
+                b1->prev = a1;
+                a1->prev = nullptr;
+                a1->next->prev = b1;
+                b1->next = a1->next;
+                a1->next = b1;
+
+                head = a1;
+            }
+            else if (a == size - 1)
+            {
+                a1->prev->next = b1;
+                b1->next->prev = a1;
+                b1->prev = a1->prev;
+                a1->next = b1->next;
+                b1->next = nullptr;
+                a1->prev = tempprev;
+                head = a1;
+                tail = b1;
+            }
+            else
+            {
+                //  cout<<"tempprev:"<<tempprev->data<<endl;
+                cout << "tempnext:" << tempnext->data << endl;
+                a1->next->prev = b1;
+                b1->next->prev = a1;
+                a1->prev->next = b1;
+                b1->prev = a1->prev;
+                b1->next = a1->next;
+                a1->prev = nullptr;
+                a1->next = tempnext;
+                a1->prev = nullptr;
+                head = a1;
+            }
+
+            cout << "okey: " << endl;
+            //    cout<<print2()<<endl;
+        }
+        else if (a == size - 1)
+        {
+            //     cout<<"a ==size-1"<<endl;
+            //    cout<<"a1 data: "<<a1->data<<". b1->data: "<<b1->data<<endl;
+            if (b == a - 1)
+            {
+                b1->prev->next = a1;
+                a1->prev = b1;
+                b1->next = a1->next;
+                a1->next = b1;
+                b1->prev = a1;
+            }
+            else
+            {
+
+                b1->prev->next = a1;
+                b1->next->prev = a1;
+                a1->prev->next = b1;
+                // a1->next->prev=b1;
+                b1->next = a1->next;
+                b1->prev = a1->prev;
+                a1->prev = tempprev;
+                a1->next = tempnext;
+            }
+            tail = a1;
+        }
+        else if (b == size - 1)
+        {
+            //  cout<<"b ==size-1"<<endl;
+            //   cout<<"a1 data: "<<a1->data<<". b1->data: "<<b1->data<<endl;
+            if (a == b - 1)
+            {
+                b1->next = a1;
+                a1->next = nullptr;
+                a1->prev->next = b1;
+                b1->next = a1;
+            }
+            else
+            {
+                a1->prev->next = b1;
+                a1->next->prev = b1;
+                b1->prev->next = a1;
+                b1->next = a1->next;
+                a1->next = nullptr;
+                b1->prev = a1->prev;
+                a1->prev = tempprev;
+            }
+            tail = a1;
+        }
+        printrec_data1(head);
     }
-    void printrec_data2(Node<T1,T2> *current)
+    void printrec_data1(Node* current)
     {
         if (current == nullptr)
             return;
         else
         {
             if (current->next != nullptr)
-                cout << current->data2 << " ";
+                cout << current->data<< " ";
             else
-                cout << current->data2;
-            printrec_data2(current->next);
+                cout << current->data;
+            printrec_data1(current->next);
         }
     }
 };
