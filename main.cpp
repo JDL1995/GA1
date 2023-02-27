@@ -171,7 +171,8 @@ int main(int argc, char *argv[])
                     }
                     else if (line != "Bar1")
                     {
-                        reversedStr = reverseParentheses(line);
+                        value_str=line;
+                        reversedStr = reverseParentheses(value_str);
                      // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
                   //   cout << "original string : " << vect1[i] << endl;
                     cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
@@ -208,7 +209,7 @@ int main(int argc, char *argv[])
                     else if (line != "Bar2")
                     {
                         value_str = line;
-                         reversedStr = reverseParentheses(line);
+                         reversedStr = reverseParentheses(value_str);
             // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
                   //   cout << "original string : " << vect1[i] << endl;
                      cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
@@ -272,8 +273,8 @@ int main(int argc, char *argv[])
              << endl;
         list_bar1.printrec_data1(list_bar1.getHead());
         cout << "ok"<<endl;
-      //  list_bar1.recursiveSort(list_bar1.getHead(),0,0,0);
-        //list_bar1.printrec_data2(list_bar1.getHead());
+        list_bar1.recursiveSort(list_bar1.getHead(),0,0,0);
+       // list_bar1.printrec_data2(list_bar1.getHead());
         cout << endl
              << "printing all data of list_bar1 after sorting" << endl
              << endl;
@@ -292,7 +293,7 @@ int main(int argc, char *argv[])
              << "printing all data of list_bar2 after sorting" << endl
              << endl;
         list_bar2.recursiveSort(list_bar2.getHead(),0,0,0);
-        list_bar2.printrec_data2(list_bar2.getHead());
+        list_bar2.printrec_data1(list_bar2.getHead());
         cout << endl;
 
         
