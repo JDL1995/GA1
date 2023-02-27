@@ -57,6 +57,7 @@ public:
     
     }
     void recursiveSort(Node *n,int i, int j, int ctr){
+        cout<<"size is: "<<getSize()<<endl;
       if(i==getSize()-1){
         return;
       }
@@ -130,17 +131,28 @@ void linkedlist::swap(int a, int b)
         Node *tempprev = b1->prev;
        // temp = b1;
         int size = getSize();
+         printrec_data1(head);
+    cout<<"a1 `data: "<<a1->data<<". b1->data: "<<b1->data<<endl;
         if ((a != 0 && b != 0) && (a != (size - 1) && b != (size - 1)))
         {
-        cout<<"a1 `data: "<<a1->data<<". b1->data: "<<b1->data<<endl;
+       
             if(b==a-1){
+                cout<<"a1: "<<a1->data<<endl;
+                cout<<"b1:"<<b1->data<<endl;
             a1->next->prev=b1;   
             b1->next=a1->next;
             b1->prev->next=a1;
-            a1->prev=b1->prev;
+            cout<<"b1 prev"<<b1->prev->data<<endl;
+
+            cout<<"b1->prev->next="<<b1->prev->next->data<<endl;
+            cout<<"b1->next"<<b1->next->data<<endl;
+            a1->prev=tempprev;
             b1->prev=a1;
             a1->next=b1;
             cout<<"b==a-1"<<endl;
+           cout<<"a1->next="<<a1->next->data<<endl;
+           cout<<"a1->data:"<<a1->data<<endl;
+           cout<<"b1->next"<<b1->next->data<<endl;
            // cout<<print2();
             }else if(a==b-1){
                 b1->next->prev=a1;
@@ -190,16 +202,17 @@ void linkedlist::swap(int a, int b)
               tail=a1;
             }
             else{
-  
-            b1->prev = a1->prev;
+
+
+                b1->prev->next=a1;
+            b1->next->prev= a1;
             b1->next = a1->next;
             a1->next->prev = b1;
-            tempprev->next = a1;
              a1->prev = tempprev;
             a1->next = tempnext;
             if (b != size - 1)
             {
-             tempnext->prev = a1;
+            // tempnext->prev = a1;
             }else{
                 tail=a1;
             }
@@ -212,9 +225,9 @@ void linkedlist::swap(int a, int b)
         }
         else if (b == 0)
         {
-      //  cout<<"a1 data: "<<a1->data<<". b1->data: "<<b1->data<<endl;
-      //  cout<<"b is zero"<<endl;
-     //    cout<<print2()<<endl;
+       cout<<"a1 data: "<<a1->data<<". b1->data: "<<b1->data<<endl;
+      cout<<"b is zero"<<endl;
+    //    cout<<print2()<<endl;
       //  cout<<"a1->next->prev is "<<a1->next->prev->data<<endl;
     //    cout<<"b1->next is "<<b1->next->data<<endl;
     //    cout<<"a1->next is "<<a1->next->data<<endl; 
@@ -236,13 +249,16 @@ void linkedlist::swap(int a, int b)
           head=a1;
           tail=b1;
         }else{
+         //  cout<<"tempprev:"<<tempprev->data<<endl;
+            cout<<"tempnext:"<<tempnext->data<<endl;
             a1->next->prev=b1;
+            b1->next->prev=a1;
            a1->prev->next=b1; 
            b1->prev=a1->prev;
            b1->next=a1->next;
            a1->prev=nullptr;
            a1->next=tempnext;
-           a1->prev=tempprev;
+           a1->prev=nullptr;
            head=a1;
         }
          
@@ -291,6 +307,6 @@ void linkedlist::swap(int a, int b)
             tail=a1;
 
         }
-        
+         printrec_data1(head);
     };
 #endif

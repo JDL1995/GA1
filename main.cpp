@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
                     cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
                     value = stoi(reversedStr);
                      cout << "value of string as an integer pushed to list_bar1: " << value << endl;
-                     list_bar1.add_tail(reversedStr);
+                     list_bar2.add_tail(reversedStr);
                       //  vect1.push_back(value_str);
                     }
 
@@ -271,20 +271,20 @@ int main(int argc, char *argv[])
         cout << endl
              << "printing all data of list_bar1 before sorting" << endl
              << endl;
-        list_bar1.printrec_data1(list_bar1.getHead());
+      //  list_bar1.printrec_data1(list_bar1.getHead());
         cout << "ok"<<endl;
-        list_bar1.recursiveSort(list_bar1.getHead(),0,0,0);
+      //  list_bar1.recursiveSort(list_bar1.getHead(),0,0,0);
        // list_bar1.printrec_data2(list_bar1.getHead());
         cout << endl
              << "printing all data of list_bar1 after sorting" << endl
              << endl;
-        list_bar1.printrec_data2(list_bar1.getHead());
+      //  list_bar1.printrec_data2(list_bar1.getHead());
         cout << endl;
 
         cout << endl
              << "printing all data of list_bar2 before sorting" << endl
              << endl;
-        list_bar2.printrec_data1(list_bar2.getHead());
+      //  list_bar2.printrec_data1(list_bar2.getHead());
         cout << endl;
         //insertionS(list_bar2.getHead());
          cout << endl;
