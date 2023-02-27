@@ -176,7 +176,18 @@ void linkedlist::swap(int a, int b)
                 a1->next=b1->next;
                 b1->next=a1;
                 head=b1;
-            }else{
+            }else if (b==size-1){
+              a1->prev=b1->prev
+              a1->next->prev=b1;
+
+              b1->prev->next=a1;
+
+              b1->next=a1->next;
+              a1->next=nullptr;
+              b1->prev=nullptr;
+              head=b1;
+            }
+            else{
   
             b1->prev = a1->prev;
             b1->next = a1->next;
