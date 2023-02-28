@@ -7,18 +7,14 @@
 #include <algorithm>
 using namespace std;
 
-
 bool is_emptyFile(std::ifstream &pFile)
 {
     return pFile.peek() == std::ifstream::traits_type::eof();
 }
-
 string reverseParentheses(string str)
 {
-    // str = "10(01)"
-    //int num_pairs = std::count(str.begin(), str.end(), '(');
-    //cout << "Number of pairs of parenthesises: " << num_pairs << endl;
-    int length = str.length(); // length = 6
+
+    int length = str.length();
     int start = -1;
     for (int i = 0; i < length; i++)
     {
@@ -28,85 +24,93 @@ string reverseParentheses(string str)
         }
         else if (str[i] == ')')
         {
-            string reversed = str.substr(start + 1, i - start - 1);
-            reverse(reversed.begin(), reversed.end());
-            return reverseParentheses(str.substr(0, start) + reversed + str.substr(i + 1));
+            if (i == start + 1)
+                return reverseParentheses(str.substr(0, start) + str.substr(i + 1));
+            else
+            {
+                string reversed = str.substr(start + 1, i - start - 1);
+                reverse(reversed.begin(), reversed.end());
+                return reverseParentheses(str.substr(0, start) + reversed + str.substr(i + 1));
+            }
+        }
+    }
+    return str;
+}
+void guiltyVerdict(Node *head) // will need take in all of the IDs (sorted)
+{
+    Node *cur = head;
+    Node *search = nullptr;
+    if (head == nullptr || head->next == nullptr)
+    {
+        return;
+    }
+    while (cur != nullptr)
+    {
+        search = cur->next;
+        while (search != nullptr)
+        {
+            if (stoi(search->data) == stoi(cur->data))
+            {
+                cur->guilty = true;
+                search->guilty = true;
+            }
+            search = search->next;
+        }
+        cur = cur->next;
+    }
+}
+void guiltyPrint(Node *head, ofstream &outputFile) // will also need to take in all IDs sorted
+{
+    Node *cur = head;
+    Node *checker = head;
+    bool g, i;
+    while (checker != nullptr)
+    {
+        if (checker->guilty)
+        {
+            g = true;
+        }
+        else if (!checker->guilty)
+        {
+            i = true;
+        }
+        checker = checker->next;
+    }
+
+    if (g)
+    {
+        outputFile << "Guilty:\n";
+        if (head->guilty)
+        {
+            outputFile << head->data << std::endl;
+            cur = cur->next;
+        }
+
+        while (cur != nullptr)
+        {
+            if (cur->guilty && (cur->prev->data != cur->data))
+            {
+                outputFile << cur->data << std::endl;
+            }
+            cur = cur->next;
         }
     }
 
-    //std::cout << "|" << str << "|" << endl;
-    return str;
+    if (i)
+    {
+        cur = head;
+        outputFile << "Innocent:\n";
+        while (cur != nullptr)
+        {
+            if (!cur->guilty)
+            {
+                outputFile << cur->data << std::endl;
+            }
+            cur = cur->next;
+        }
+    }
 }
 
-void insertionS(Node * head,linkedlist theList)
-{
-	if (head == nullptr)
-		return;
-
-	int key = stoi(head->data);
-
-	Node* temp = head;
-	Node* temp2 = head;
-
-	while (temp2->prev != nullptr && stoi(temp2->prev->data) > key)
-	{
-
-		temp2 = temp2->prev;
-
-	}
-	if (temp->next == nullptr && temp2->prev == nullptr && stoi(temp2->data) > key)//make this the first if statment
-	{
-
-		temp->prev->next = temp->next;
-		head = temp->prev;
-		temp->next = temp2;
-		temp->prev = temp2->prev;
-		head = temp;
-		temp2->prev = temp;
-		//print();
-	}
-	else if (temp2->prev == nullptr && stoi(temp2->data) > key)
-	{
-
-		temp->next->prev = temp->prev;
-		temp->prev->next = temp->next;
-		head = temp->prev;
-		temp->next = temp2;
-		temp->prev = nullptr;
-		head = temp;
-		temp2->prev = temp;
-		//print();
-	}
-
-
-	//might need a tail and adjacent case
-	else if (temp->next == nullptr && stoi(temp2->data) > key)
-	{
-
-		temp->prev->next = temp->next;  //dont know if it breaks it  * = nullptr *
-		head = temp->prev;
-		temp->next = temp2;
-		temp->prev = temp2->prev;
-		temp2->prev->next = temp;
-		temp2->prev = temp;
-		//print();
-
-	}
-	else if (stoi(temp2->data) > stoi(temp->data))  //general case
-	{
-
-
-		temp->next->prev = temp->prev;
-		temp->prev->next = temp->next;
-		head = temp->prev;
-		temp->next = temp2;
-		temp->prev = temp2->prev;
-		temp2->prev->next = temp;
-		temp2->prev = temp;
-		//print();
-	}
-	insertionS(head->next,theList);
-}
 int main(int argc, char *argv[])
 {
     ArgumentManager am(argc, argv);
@@ -115,189 +119,101 @@ int main(int argc, char *argv[])
     // const string output = am.get("output");
 
     // ofstream ofs(output);
-    // ifstream ifs(input//);
+    // ifstream ifs(input);
     //  ifstream coms(command);
 
-    ifstream inputfile("input1.txt");
-    ofstream outputfile("output1.txt");
+    ifstream inputfile("input3.txt");
+    ofstream outputfile("output3.txt");
     //  ifstream commandfile("command3.txt");
 
     ifstream input(am.get("input"));
     // ifstream command(am.get("command"));
     ofstream output(am.get("output"));
 
-    linkedlist list_bar1, list_bar2, list_bar1_sorted, list_bar2_sorted;
-    vector<string> vect1, vect2;
+    linkedlist list_bar1, list_bar2, allIDs;
     string line, value_str, reversedStr, currentBarcode;
-    int value;
 
-    if (!is_emptyFile(inputfile))
+
+    if (!is_emptyFile(input))
     {
-        while (getline(inputfile, line))
+        while (getline(input, line))
         {
             line.erase(remove(line.begin(), line.end(), '\n'), line.end());
             line.erase(remove(line.begin(), line.end(), '\r'), line.end());
 
-            cout << "line currently is: |" << line << "|" << endl;
-
             if (line == "Bar1" || line == "Bar2")
-            {
                 currentBarcode = line;
-                cout << "currentBarcode is now: " << currentBarcode << endl;
-            }
 
             if (currentBarcode == "Bar1")
             {
-                cout << "entering do-while loop for bar 1" << endl;
                 do
                 {
                     line.erase(remove(line.begin(), line.end(), '\n'), line.end());
                     line.erase(remove(line.begin(), line.end(), '\r'), line.end());
 
-                    cout << "line currently is: |" << line << "|" << endl;
-
                     if (line == "")
-                    {
-                        cout << "line was empty. Skipping to next line" << endl;
                         continue;
-                    }
-
                     else if (line == "Bar2")
                     {
                         currentBarcode = line;
-                        cout << "currentBarcode is now: " << currentBarcode << endl;
-                        cout << "breaking out of do-while loop for bar 1" << endl;
                         break;
                     }
                     else if (line != "Bar1")
                     {
-                        value_str=line;
+                        value_str = line;
                         reversedStr = reverseParentheses(value_str);
-                     // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
-                  //   cout << "original string : " << vect1[i] << endl;
-                    cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
-                    value = stoi(reversedStr);
-                     cout << "value of string as an integer pushed to list_bar1: " << value << endl;
-                     list_bar1.add_tail(reversedStr);
-                      //  vect1.push_back(value_str);
+                        list_bar1.add_tail(reversedStr);
                     }
 
-                } while (getline(inputfile, line));
+                } while (getline(input, line));
             }
             else if (currentBarcode == "Bar2")
             {
-                cout << "entering do-while loop for bar 2" << endl;
                 do
                 {
                     line.erase(remove(line.begin(), line.end(), '\n'), line.end());
                     line.erase(remove(line.begin(), line.end(), '\r'), line.end());
 
-                    cout << "line currently is: |" << line << "|" << endl;
-
                     if (line == "")
-                    {
-                        cout << "line was empty. Skipping to next line" << endl;
                         continue;
-                    }
                     else if (line == "Bar1")
                     {
                         currentBarcode = line;
-                        cout << "currentBarcode is now: " << currentBarcode << endl;
-                        cout << "breaking out of do-while loop for bar 2" << endl;
                         break;
                     }
                     else if (line != "Bar2")
                     {
                         value_str = line;
-                         reversedStr = reverseParentheses(value_str);
-            // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
-                  //   cout << "original string : " << vect1[i] << endl;
-                     cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
-                     value = stoi(reversedStr);
-                     cout << "value of string as an integer pushed to list_bar1: " << value << endl;
-                     list_bar2.add_tail(reversedStr);
-                        cout << "Pushing the following to vect2: |" << value_str << "|" << endl;
-                      //  vect2.push_back(value_str);
+                        reversedStr = reverseParentheses(value_str);
+                        list_bar2.add_tail(reversedStr);
+
                     }
 
-                } while (getline(inputfile, line));
+                } while (getline(input, line));
             }
         }
 
-        cout << endl;
-/*
-        cout << "Vector 1 size: " << vect1.size() << endl;
-        for (int i = 0; i < vect1.size(); i++)
-        {   
-            reversedStr = reverseParentheses(vect1[i]);
-            // string reversedStr = list_bar1.reverseParentheses(vect1[i]);
-            cout << "original string : " << vect1[i] << endl;
-            cout << "reversed string pushed to list_bar1: " << reversedStr << endl;
-            value = stoi(reversedStr);
-            cout << "value of string as an integer pushed to list_bar1: " << value << endl;
-            list_bar1.add_tail(reversedStr);
-        }
+        list_bar1.recursiveSort(list_bar1.getHead(), 0, 0, 0);
+        list_bar2.recursiveSort(list_bar2.getHead(), 0, 0, 0);
 
-        cout << "List_bar_1 size: " << list_bar1.getSize() << endl;
-        cout << endl
-             << "printing list_bar1" << endl
-             << endl;
-        list_bar1.printrec_data1(list_bar1.getHead());
-        cout << endl;
-
-        cout << "Vector 2 size: " << vect2.size() << endl;
-        for (int i = 0; i < vect2.size(); i++)
+        Node *tempHead = list_bar1.getHead();
+        while (tempHead != nullptr)
         {
-            reversedStr = reverseParentheses(vect2[i]);
-            // string reversedStr = list_bar2.reverseParentheses(vect2[i]);
-            cout << "original string : " << vect2[i] << endl;
-            cout << "reversed string pushed to list_bar2: " << reversedStr << endl;
-            value = stoi(reversedStr);
-            cout << "value of string as an integer pushed to list_bar2: " << value << endl;
-            list_bar2.add_tail(reversedStr);
+            allIDs.add_tail(tempHead->data);
+            tempHead = tempHead->next;
         }
-*/
-        cout << "List_bar_2 size: " << list_bar1.getSize() << endl;
-        cout << endl
-             << "printing list_bar2" << endl
-             << endl;
-        list_bar2.printrec_data1(list_bar2.getHead());
-        cout << endl;
-        //cout << "Data value of the head of list_bar1:  " << list_bar1.getHead()->data << endl;
-        //cout << "Data value of the head of list_bar2:  " << list_bar1.getHead()->data << endl;
-        //list_bar1_sorted.add_tail(list_bar1.insertionSort_recursive(list_bar1.getHead()));
-        //list_bar2_sorted.add_tail(list_bar2.insertionSort_recursive(list_bar2.getHead()));
 
-        cout << endl
-             << "printing all data of list_bar1 before sorting" << endl
-             << endl;
-        list_bar1.printrec_data1(list_bar1.getHead());
-        cout << "ok"<<endl;
-        list_bar1.recursiveSort(list_bar1.getHead(),0,0,0);
-       // list_bar1.printrec_data2(list_bar1.getHead());
-        cout << endl
-             << "printing all data of list_bar1 after sorting" << endl
-             << endl;
-        list_bar1.printrec_data2(list_bar1.getHead());
-        cout << endl;
+        tempHead = list_bar2.getHead();
+        while (tempHead != nullptr)
+        {
+            allIDs.add_tail(tempHead->data);
+            tempHead = tempHead->next;
+        }
 
-        cout << endl
-             << "printing all data of list_bar2 before sorting" << endl
-             << endl;
-        list_bar2.printrec_data1(list_bar2.getHead());
-        cout << endl;
-        //insertionS(list_bar2.getHead());
-         cout << endl;
-            
-        cout << endl
-             << "printing all data of list_bar2 after sorting" << endl
-             << endl;
-        list_bar2.recursiveSort(list_bar2.getHead(),0,0,0);
-        list_bar2.printrec_data1(list_bar2.getHead());
-        cout << endl;
+        allIDs.recursiveSort(allIDs.getHead(), 0, 0, 0);
 
-        
-
+        guiltyVerdict(allIDs.getHead());
+        guiltyPrint(allIDs.getHead(), output);
     }
     return 0;
 }
