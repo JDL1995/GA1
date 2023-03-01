@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "linkedlist.h"
+#include "linkedList.h"
 #include "ArgumentManager.h"
 #include <algorithm>
 using namespace std;
