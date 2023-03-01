@@ -211,7 +211,15 @@ int main(int argc, char *argv[])
         }
 
         allIDs.recursiveSort(allIDs.getHead(), 0, 0, 0);
-
+        guiltyOI<linkedlist> *myGuiltyOI = new guiltyOI<linkedlist>;
+        myGuiltyOI=allIDs.recursiveGuilty<linkedlist>();
+        if(myGuiltyOI->guilty->getSize()!=0){
+                    myGuiltyOI->guilty->printrec_data1(myGuiltyOI->guilty->getHead());
+        }
+        cout<<"got here"<<endl;
+        if(myGuiltyOI->innocent->getSize()!=0){
+        myGuiltyOI->innocent->printrec_data1(myGuiltyOI->innocent->getHead());
+        }
         guiltyVerdict(allIDs.getHead());
         guiltyPrint(allIDs.getHead(), output);
     }
