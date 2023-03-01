@@ -88,9 +88,13 @@ int main(int argc, char *argv[])
                     }
                     else if (line != "Bar1")
                     {
-                        value_str = line;
+                        if (std::find_if(line.begin(), line.end(), (int(*)(int))std::isdigit) != line.end())
+{
+                         value_str = line;
                         reversedStr = reverseParentheses(value_str);
                         list_bar1.add_tail(reversedStr);
+}
+                        
                     }
 
                 } while (getline(input, line));
@@ -111,9 +115,12 @@ int main(int argc, char *argv[])
                     }
                     else if (line != "Bar2")
                     {
-                        value_str = line;
+                              if (std::find_if(line.begin(), line.end(), (int(*)(int))std::isdigit) != line.end())
+{
+                         value_str = line;
                         reversedStr = reverseParentheses(value_str);
                         list_bar1.add_tail(reversedStr);
+}
 
                     }
 
