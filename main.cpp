@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
                 } while (getline(input, line));
             }
         }
+        if(list_bar1.getSize()!=0){
 
         list_bar1.recursiveSort(list_bar1.getHead(), 0, 0, 0);
      //   list_bar2.recursiveSort(list_bar2.getHead(), 0, 0, 0);
@@ -158,6 +159,13 @@ int main(int argc, char *argv[])
         
        // guiltyVerdict(allIDs.getHead());
       //  guiltyPrint(allIDs.getHead(), output);
+    }else{
+        output<<""<<endl;
+    }
+    
+    }
+    else{
+        output<<""<<endl;
     }
     return 0;
 }
