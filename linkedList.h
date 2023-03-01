@@ -77,9 +77,29 @@ public:
        return myGuiltyOI;
 
     }
+    ofstream& recursiveOut(ofstream &output,Node *A){
+        if(A==nullptr){
+            return output;
+        }
+        else{
+            if(A->next==nullptr){
+                output<<A->data;
+            }else{
+            output<<A->data<<endl;
+            }
+           return recursiveOut(output,A->next);
+        }
+
+    }
+
     void recursiveG(int size, int i, Node *A,linkedlist *g, linkedlist *in){
 
          if(i==size-1 || A==nullptr){
+            if(i==size-1){
+                if(A->prev->data!=A->data){
+                    in->add_tail(A->data);
+                }
+            }
             return;
         }
         if(A->data==A->next->data){

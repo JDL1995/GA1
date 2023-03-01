@@ -36,80 +36,8 @@ string reverseParentheses(string str)
     }
     return str;
 }
-void guiltyVerdict(Node *head) // will need take in all of the IDs (sorted)
-{
-    Node *cur = head;
-    Node *search = nullptr;
-    if (head == nullptr || head->next == nullptr)
-    {
-        return;
-    }
-    while (cur != nullptr)
-    {
-        search = cur->next;
-        while (search != nullptr)
-        {
-            if (stoi(search->data) == stoi(cur->data))
-            {
-                cur->guilty = true;
-                search->guilty = true;
-            }
-            search = search->next;
-        }
-        cur = cur->next;
-    }
-}
-void guiltyPrint(Node *head, ofstream &outputFile) // will also need to take in all IDs sorted
-{
-    Node *cur = head;
-    Node *checker = head;
-    bool g, i;
-    while (checker != nullptr)
-    {
-        if (checker->guilty)
-        {
-            g = true;
-        }
-        else if (!checker->guilty)
-        {
-            i = true;
-        }
-        checker = checker->next;
-    }
 
-    if (g)
-    {
-        outputFile << "Guilty:\n";
-        if (head->guilty)
-        {
-            outputFile << head->data << std::endl;
-            cur = cur->next;
-        }
 
-        while (cur != nullptr)
-        {
-            if (cur->guilty && (cur->prev->data != cur->data))
-            {
-                outputFile << cur->data << std::endl;
-            }
-            cur = cur->next;
-        }
-    }
-
-    if (i)
-    {
-        cur = head;
-        outputFile << "Innocent:\n";
-        while (cur != nullptr)
-        {
-            if (!cur->guilty)
-            {
-                outputFile << cur->data << std::endl;
-            }
-            cur = cur->next;
-        }
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -185,7 +113,7 @@ int main(int argc, char *argv[])
                     {
                         value_str = line;
                         reversedStr = reverseParentheses(value_str);
-                        list_bar2.add_tail(reversedStr);
+                        list_bar1.add_tail(reversedStr);
 
                     }
 
@@ -194,34 +122,34 @@ int main(int argc, char *argv[])
         }
 
         list_bar1.recursiveSort(list_bar1.getHead(), 0, 0, 0);
-        list_bar2.recursiveSort(list_bar2.getHead(), 0, 0, 0);
+     //   list_bar2.recursiveSort(list_bar2.getHead(), 0, 0, 0);
 
-        Node *tempHead = list_bar1.getHead();
-        while (tempHead != nullptr)
-        {
-            allIDs.add_tail(tempHead->data);
-            tempHead = tempHead->next;
-        }
 
-        tempHead = list_bar2.getHead();
-        while (tempHead != nullptr)
-        {
-            allIDs.add_tail(tempHead->data);
-            tempHead = tempHead->next;
-        }
-
-        allIDs.recursiveSort(allIDs.getHead(), 0, 0, 0);
+    //    allIDs.recursiveSort(allIDs.getHead(), 0, 0, 0);
+      //  allIDs.printrec_data1(allIDs.getHead());
         guiltyOI<linkedlist> *myGuiltyOI = new guiltyOI<linkedlist>;
-        myGuiltyOI=allIDs.recursiveGuilty<linkedlist>();
+        myGuiltyOI=list_bar1.recursiveGuilty<linkedlist>();
+        bool arGs=false;
         if(myGuiltyOI->guilty->getSize()!=0){
+            arGs=true;
+                    output<<"Guilty:"<<endl;
+                    cout<<"guiltylist: "<<endl;
                     myGuiltyOI->guilty->printrec_data1(myGuiltyOI->guilty->getHead());
+                     myGuiltyOI->guilty->recursiveOut(output,myGuiltyOI->guilty->getHead());
         }
         cout<<"got here"<<endl;
         if(myGuiltyOI->innocent->getSize()!=0){
+            if(arGs==true){
+                output<<endl;
+            }
+            output<<"Innocent:"<<endl;
+            cout<<"innocent list"<<endl;
         myGuiltyOI->innocent->printrec_data1(myGuiltyOI->innocent->getHead());
+         myGuiltyOI->innocent->recursiveOut(output,myGuiltyOI->innocent->getHead());
         }
-        guiltyVerdict(allIDs.getHead());
-        guiltyPrint(allIDs.getHead(), output);
+        
+       // guiltyVerdict(allIDs.getHead());
+      //  guiltyPrint(allIDs.getHead(), output);
     }
     return 0;
 }
