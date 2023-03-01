@@ -8,7 +8,11 @@
 #include <algorithm>
 #include <cctype>
 using namespace std;
-
+template <typename T>
+struct guiltyOI{
+    T *guilty;
+    T *innocent;
+};
 struct Node
 {
     string data;
@@ -60,6 +64,58 @@ public:
             head = recursiveGet(pos, ++ctr, head->next);
         }
         return head;
+    }
+    template <typename T>
+     guiltyOI<T>* recursiveGuilty(){
+        T *g = new linkedlist;
+        T *I = new linkedlist;
+        int s=getSize();
+        recursiveG(s,0,head,g,I);
+       guiltyOI<T> *myGuiltyOI= new guiltyOI<T>;
+       myGuiltyOI->guilty=g;
+       myGuiltyOI->innocent=I;
+       return myGuiltyOI;
+
+    }
+    ofstream& recursiveOut(ofstream &output,Node *A){
+        if(A==nullptr){
+            return output;
+        }
+        else{
+            if(A->next==nullptr){
+                output<<A->data;
+            }else{
+            output<<A->data<<endl;
+            }
+           return recursiveOut(output,A->next);
+        }
+
+    }
+
+    void recursiveG(int size, int i, Node *A,linkedlist *g, linkedlist *in){
+
+         if(i==size-1 || A==nullptr){
+            if(i==size-1){
+                if(A->prev->data!=A->data){
+                    in->add_tail(A->data);
+                }
+            }
+            return;
+        }
+        if(A->data==A->next->data){
+            g->add_tail(A->data);
+            i++;
+            A=A->next;
+        }else{
+            if(A->prev==nullptr){
+                 in->add_tail(A->data);
+            }
+          else  if(A->prev->data!=A->data){
+                     in->add_tail(A->data);
+            }
+       
+        }
+        recursiveG(size,++i,A->next,g,in);
     }
     void recursiveSort(Node *n, int i, int j, int ctr)
     {
@@ -320,4 +376,5 @@ public:
         }
     }
 };
+
 #endif
