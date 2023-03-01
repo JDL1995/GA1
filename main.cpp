@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
                         break;
                     }
                     else if (line != "Bar1")
-                    {
+                    {//borrowed following line from https://stackoverflow.com/questions/2346599/how-to-test-if-a-string-contains-any-digits-in-c
                         if (std::find_if(line.begin(), line.end(), (int(*)(int))std::isdigit) != line.end())
 {
                          value_str = line;
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
                         break;
                     }
                     else if (line != "Bar2")
-                    {
+                    {//borrowed following line from https://stackoverflow.com/questions/2346599/how-to-test-if-a-string-contains-any-digits-in-c
                               if (std::find_if(line.begin(), line.end(), (int(*)(int))std::isdigit) != line.end())
 {
                          value_str = line;
