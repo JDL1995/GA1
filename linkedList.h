@@ -8,7 +8,10 @@
 #include <algorithm>
 #include <cctype>
 using namespace std;
-
+struct guiltyOI{
+    linkedlist *guilty;
+    linkedlist *innocent;
+}
 struct Node
 {
     string data;
@@ -60,6 +63,27 @@ public:
             head = recursiveGet(pos, ++ctr, head->next);
         }
         return head;
+    }
+    guiltyOI recursiveGuilty(){
+        linkedlist *g = new linkedlist;
+        linkedlist *I = new linkedlist;
+        int s=getSize();
+        recursiveG(s,0,head,g,I);
+       guiltyOI *myGuiltyOI= new guiltyOI;
+       myGuiltyOI->guilty=g;
+       myGuiltyOI->innocent=I;
+
+    }
+    void recursiveG(int size, int i, Node *A,linkedlist *g, linkedlist *in){
+
+         if(i==size-1){
+            return;
+        }
+        if(A->data==A->next->data){
+            A->guilty=true;
+            A->next->guilty=true;
+        }
+        recursiveGuilty(size,++i,A->next)
     }
     void recursiveSort(Node *n, int i, int j, int ctr)
     {
