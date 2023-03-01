@@ -107,7 +107,13 @@ public:
             i++;
             A=A->next;
         }else{
-            in->add_tail(A->data);
+            if(A->prev==nullptr){
+                 in->add_tail(A->data);
+            }
+          else  if(A->prev->data!=A->data){
+                     in->add_tail(A->data);
+            }
+       
         }
         recursiveG(size,++i,A->next,g,in);
     }

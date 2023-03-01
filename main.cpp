@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
             output<<"Innocent:"<<endl;
             cout<<"innocent list"<<endl;
         myGuiltyOI->innocent->printrec_data1(myGuiltyOI->innocent->getHead());
-         myGuiltyOI->innocent->recursiveOut(output,myGuiltyOI->innocent->getHead());
+      myGuiltyOI->innocent->recursiveOut(output,myGuiltyOI->innocent->getHead());
         }
         
        // guiltyVerdict(allIDs.getHead());
